@@ -5,17 +5,12 @@
 
 public with sharing class WeatherController {
 
-    // String username = System.Label.GeoNames_Username;
-    // String geonamesUrl = System.Label.GeoNames_Url;
-
-        
-
+    static   String username = System.Label.GeoNames_Username;
+    static  String geonamesUrl = System.Label.GeoNames_Url;
 
     // method to get weather information based on current location
     @AuraEnabled(cacheable=true)
     public static Map<String, Object> getWeatherbyCoordonate(Double latitude, Double longitude) {
-        String username = 'nelsonfomekong';
-        String geonamesUrl = 'http://api.geonames.org/';
         String url = geonamesUrl + 'findNearByWeatherJSON?lat=' + latitude + '&lng=' + longitude + '&username=' + username;
         Http Http = new Http();
         HttpRequest request = new HttpRequest();
