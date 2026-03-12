@@ -9,6 +9,7 @@ import { getRecord } from 'lightning/uiRecordApi';
 import weatherIcons from '@salesforce/resourceUrl/icontexei';
 import getWeatherbyCoordonate from '@salesforce/apex/WeatherController.getWeatherbyCoordonate';
 import getWeatherbyCity from '@salesforce/apex/WeatherController.getWeatherbyCity';
+import sendWeatherBulletin from '@salesforce/apex/WeatherController.sendWeatherBulletin';
 
 const ACCOUNT_FIELDS = ['Account.BillingCity'];
 export default class WeatherComponent extends LightningElement {
@@ -158,7 +159,21 @@ export default class WeatherComponent extends LightningElement {
     }
 
     return weatherIcons + '/' + ICON_MAP.default;
-}
+    }
+
+
+
+    sendWeatherByEmail() {
+
+        sendWeatherBulletin({ weatherData: this.weatherData , accountId : this.recordId, urlIcon: this.weatherData.icon })
+        .then(() => {
+            alert('Weather bulletin sent successfully!');
+        })
+        .catch(error => {
+            alert('Error sending weather bulletin: ' + error.body.message+this.recordId);
+        });
+
+    }
 
     
 

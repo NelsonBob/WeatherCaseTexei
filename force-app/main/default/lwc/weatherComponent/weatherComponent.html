@@ -13,13 +13,21 @@
                 <p><strong>Location:</strong> {weatherData.location}</p>
                 <p><strong>Temperature:</strong> {weatherData.temperature} °C</p>
                 <p><strong>Humidity:</strong> {weatherData.humidity} %</p>
-                <p><strong>Wind Speed:</strong> {weatherData.windSpeed} m/s</p>
-                <p><strong>Condition:</strong> {weatherData.clouds}</p>
+                <p><strong>Wind Speed:</strong> {weatherData.windSpeed} km/h</p>
+                <p><strong>Condition:</strong> {weatherData.clouds}</p> <br/>
+               
 
-                <img src={weatherData.icon} alt="Weather icon" class="img"/>
+                 <p><strong>Icone:</strong> <img src={weatherData.icon} alt="Weather icon" class="img"/></p> <br/>
 
             </template>
-
+            <template if:true={recordId}>
+                <lightning-button
+                    label="Send Weather Bulletin"
+                    variant="brand"
+                    onclick={sendWeatherByEmail}
+                >
+                </lightning-button>
+            </template>
             <!-- Error Message -->
             <template if:true={errorMessage}>
                 <p class="slds-text-color_error">{errorMessage}</p>
