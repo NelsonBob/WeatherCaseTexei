@@ -27,7 +27,6 @@ public with sharing class WeatherController {
 
 
     // method to get weather information based on city name
-     // Weather by city
     @AuraEnabled(cacheable=true)
     public static Map<String, Object> getWeatherbyCity(String cityName) {
 
