@@ -6,6 +6,7 @@
 
 import { LightningElement, track, api, wire } from 'lwc';
 import { getRecord } from 'lightning/uiRecordApi';
+import weatherIcons from '@salesforce/resourceUrl/icontexei';
 import getWeatherbyCoordonate from '@salesforce/apex/WeatherController.getWeatherbyCoordonate';
 import getWeatherbyCity from '@salesforce/apex/WeatherController.getWeatherbyCity';
 
@@ -19,6 +20,7 @@ export default class WeatherComponent extends LightningElement {
 
     city;
     refreshInterval;
+    
 
     // get city from account
     @wire(getRecord, { recordId: '$recordId', fields: ACCOUNT_FIELDS })
@@ -135,9 +137,41 @@ export default class WeatherComponent extends LightningElement {
          temperature: obs.temperature,
          windSpeed: obs.windSpeed,
          humidity: obs.humidity,
-         clouds: condition
+         clouds: condition,
+         icon: this.getIcon(condition)
         };
     }
 
-    
+
+    getIcon(condition) {
+
+    if (!condition) {
+        return weatherIcons + '/' + ICON_MAP.default;
+    }
+
+    const cond = condition.toLowerCase();
+
+    for (const key in ICON_MAP) {
+        if (cond.includes(key)) {
+            return weatherIcons + '/' + ICON_MAP[key];
+        }
+    }
+
+    return weatherIcons + '/' + ICON_MAP.default;
 }
+
+    
+
+}
+
+
+const ICON_MAP = {
+    clear: 'sun.png',
+    sun: 'sun.png',
+    rain: 'rain.png',
+    storm: 'storm.png',
+    thunder: 'storm.png',
+    snow: 'snow.png',
+    cloud: 'cloud.png',
+    default: 'cloud.png'
+};
