@@ -3,17 +3,28 @@
   @version 1.0.0
 -->
 
+
 <template>
     <lightning-card title="Weather Information" icon-name="utility:weather">
         <div class="slds-p-horizontal_medium">
+
+            <!-- Weather Data -->
             <template if:true={weatherData}>
-                <p><strong>Location:</strong> {weatherData.Location}</p>
+                <p><strong>Location:</strong> {weatherData.location}</p>
                 <p><strong>Temperature:</strong> {weatherData.temperature} °C</p>
                 <p><strong>Humidity:</strong> {weatherData.humidity} %</p>
                 <p><strong>Wind Speed:</strong> {weatherData.windSpeed} m/s</p>
-                <p><strong>Condition:</strong> {weatherData.condition} </p>
-                <img src="" />
+                <p><strong>Condition:</strong> {weatherData.clouds}</p>
+
+                <img src="" alt="Weather icon" />
+
             </template>
+
+            <!-- Error Message -->
+            <template if:true={errorMessage}>
+                <p class="slds-text-color_error">{errorMessage}</p>
+            </template>
+
         </div>
     </lightning-card>
 </template>

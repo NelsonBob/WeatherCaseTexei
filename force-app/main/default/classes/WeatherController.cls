@@ -25,5 +25,43 @@ public with sharing class WeatherController {
         }
     }
 
+
+    // method to get weather information based on city name
+     // Weather by city
+    @AuraEnabled(cacheable=true)
+    public static Map<String, Object> getWeatherbyCity(String cityName) {
+
+        String url = geonamesUrl + 'searchJSON?q=' + EncodingUtil.urlEncode(cityName,'UTF-8')
+                     + '&maxRows=1&username=' + username;
+
+        Http http = new Http();
+        HttpRequest request = new HttpRequest();
+        request.setEndpoint(url);
+        request.setMethod('GET');
+
+        HttpResponse response = http.send(request);
+
+        if(response.getStatusCode() != 200) {
+            throw new AuraHandledException('Erreur API GeoNames: ' + response.getStatus());
+        }
+
+        Map<String,Object> searchResult =
+            (Map<String,Object>) JSON.deserializeUntyped(response.getBody());
+
+        List<Object> geonames =
+            (List<Object>) searchResult.get('geonames');
+
+       
+        if(geonames == null || geonames.isEmpty()) {
+            throw new AuraHandledException('Ville introuvable : ' + cityName);
+        }
+
+        Map<String,Object> geo = (Map<String,Object>) geonames[0];
+
+        Double latitude = Double.valueOf(String.valueOf(geo.get('lat')));
+        Double longitude = Double.valueOf(String.valueOf(geo.get('lng')));
+
+        return getWeatherbyCoordonate(latitude, longitude);
+    }
 }
     
