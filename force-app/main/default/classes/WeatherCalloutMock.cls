@@ -4,6 +4,7 @@
  */
 
 
+
 @isTest
 global class WeatherCalloutMock implements HttpCalloutMock {
 
@@ -25,4 +26,7 @@ global class WeatherCalloutMock implements HttpCalloutMock {
 
         return res;
     }
+    
+   
+    
 }
