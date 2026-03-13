@@ -2,21 +2,24 @@
  * @author Nelson Fomekong
  * @version 1.0.0
  */
+
 @RestResource(urlMapping='/weather/*')
 global with sharing class WeatherAPI {
 
     @HttpGet
-    global static Map<String,Object> getWeather(){
+    global static String getWeather(){
 
         RestRequest req = RestContext.request;
 
-        String city = req.requestParams.get('city');
-        String latStr = req.requestParams.get('lat');
-        String lngStr = req.requestParams.get('lng');
+        String city = req.params.get('city');
+        String latStr = req.params.get('lat');
+        String lngStr = req.params.get('lng');
+
+        Map<String,Object> result;
 
         if(city != null){
 
-            return WeatherController.getWeatherbyCity(city);
+            result = WeatherController.getWeatherbyCity(city);
 
         }
         else if(latStr != null && lngStr != null){
@@ -24,16 +27,13 @@ global with sharing class WeatherAPI {
             Double lat = Double.valueOf(latStr);
             Double lng = Double.valueOf(lngStr);
 
-            Map<String,Object> weather =
-                WeatherController.getWeatherbyCoordonate(lat,lng);
-
-            return weather;
+            result = WeatherController.getWeatherbyCoordonate(lat,lng);
         }
         else{
 
-            throw new AuraHandledException(
-                'Provide city or lat/lng'
-            );
+            throw new AuraHandledException('Provide city or lat/lng');
         }
+
+        return JSON.serialize(result);
     }
 }
